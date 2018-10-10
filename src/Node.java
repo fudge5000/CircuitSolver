@@ -16,7 +16,7 @@ public class Node extends ElectricComponent
     
     /**
      * Generates a part of the matrix to solve this circuit
-     * @return a node equation with the coefficients for all
+     * @return a node equation with the coefficients for all node voltages
      */
     public double[] generateNodeEquasion(int nodeCount)
     {

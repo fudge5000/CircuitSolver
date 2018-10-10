@@ -6,6 +6,16 @@
 public class Mesh
 {
     private MeshLink link;
+    private int index;
+    
+    /**
+     * Generates a part of the matrix to solve this circuit
+     * @return a mesh equation with the coefficients for all mesh currents
+     */
+    public double[] generateMeshEquasion()
+    {
+        return null;
+    }
     
     public boolean equals(Mesh other)
     {

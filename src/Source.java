@@ -7,8 +7,8 @@ public class Source extends ElectricComponent
 {
     private double value;
     private String type;
-    private ElectricComponent start;
-    private ElectricComponent end;
+    private SourceStart start;
+    private SourceEnd end;
     private boolean zeroed = false;
     
     /**
@@ -33,7 +33,7 @@ public class Source extends ElectricComponent
      * Getter method for the start field
      * @return the start
      */
-    public ElectricComponent getStart()
+    public SourceStart getStart()
     {
         return start;
     }
@@ -42,7 +42,7 @@ public class Source extends ElectricComponent
      * Getter method for the end field
      * @return the end
      */
-    public ElectricComponent getEnd()
+    public SourceEnd getEnd()
     {
         return end;
     }

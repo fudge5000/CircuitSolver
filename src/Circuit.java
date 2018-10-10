@@ -28,16 +28,54 @@ public class Circuit
         this.meshList = meshList;
     }
     
-    public double[] convertToMeshList()
+    /**
+     * Create a Circuit object
+     * @param nodeList list of populated nodes
+     * @param meshList list of meshes
+     */
+    public Circuit(Node[] nodeList, Mesh[] meshList)
     {
-        return null;
+        this.nodeList = nodeList;
+        this.meshList = meshList;
+    }
+    
+    /**
+     * Converts to a mesh list object
+     */
+    public void convertToMeshList()
+    {
+        
     }
     
     /**
      * Gets the node voltages for each node
      * @return an array with voltages for each node
      */
-    public double[] getNodeVoltageList()
+    public double[] getMeshKVLList()
+    {
+        double[][] matrix = new double[meshList.length][meshList.length];
+        
+        for (int i = 0; i < meshList.length; i++)
+        {
+            matrix[i] = meshList[i].generateMeshEquasion(meshList.length);
+        }
+        
+        double[] solution = this.solveEquasions(matrix);
+        double[] result = new double[solution.length + 1];
+        
+        for (int i = 0; i < solution.length; i++)
+        {
+            result[i + 1] = solution[i];
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Gets the node voltages for each node
+     * @return an array with voltages for each node
+     */
+    public double[] getNodeKCLList()
     {
         double[][] matrix = new double[nodeList.length][nodeList.length];
         
