@@ -11,11 +11,11 @@ Model and solve electric circuits using strategies learned in ECE 081
 
 4. If there is a voltage source between two unknown nodes, convert to a supernode
 
-5. Generate any compatability equasions for supernodes
+5. Generate any compatibility equations for super-nodes
 
-6. Generate system of KCL equasions for each of the nodes
+6. Generate system of KCL equations for each of the nodes
 
-7. Solve system of equasions using matricies
+7. Solve the system of equations using matrices
 
 8. Fill in the rest of the node voltages and use to find voltage drops over all elements
 
@@ -28,15 +28,15 @@ Model and solve electric circuits using strategies learned in ECE 081
 
 1. Simplify to a certain degree by using Norton / Thevenin and Req
 
-2. Convert the circuit into a number of non-rhedundant meshes
+2. Convert the circuit into a number of non-redundant meshes
 
 3. If there is an internal current source, convert to a supermesh
 
-4. Generate compatability equasions for all supermeshes
+4. Generate compatibility equations for all super-meshes
 
-5. generate system of KVL equasions for each of the meshes
+5. Generate system of KVL equations for each of the meshes
 
-6. solve system of equasions using matricies
+6. Solve the system of equations using matrices
 
 7. Use mesh currents to find currents across all elements
 
