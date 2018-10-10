@@ -12,11 +12,16 @@ public class Mesh
      * Generates a part of the matrix to solve this circuit
      * @return a mesh equation with the coefficients for all mesh currents
      */
-    public double[] generateMeshEquasion()
+    public double[] generateMeshEquasion(int length)
     {
         return null;
     }
     
+    /**
+     * Checks if this mesh is the same as other
+     * @param other an other mesh to compare with
+     * @return whether they are the same
+     */
     public boolean equals(Mesh other)
     {
         if (this == other)

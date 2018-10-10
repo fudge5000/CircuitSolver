@@ -8,6 +8,11 @@ public class Node extends ElectricComponent
     private ElectricComponent[] compList;
     private int index;
     
+    /**
+     * Construct a node object
+     * @param index index of node
+     * @param compList list of components connected to the node
+     */
     public Node(int index, ElectricComponent[] compList)
     {
         this.index = index;
@@ -45,6 +50,10 @@ public class Node extends ElectricComponent
         return equasion;
     }
     
+    /**
+     * Getter method for index field
+     * @return index field
+     */
     public int getIndex()
     {
         return index;
