@@ -38,7 +38,7 @@ Model and solve electric circuits using strategies learned in ECE 081
 
 6. solve system of equasions using matricies
 
-7. Use mesh currents to find currents accross all elements
+7. Use mesh currents to find currents across all elements
 
 8. Use currents to find all voltage drops over resistors
 
