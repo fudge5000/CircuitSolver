@@ -2,7 +2,7 @@
 Model and solve electric circuits using strategies learned in ECE 081
 
 
-#Process for solving a simple circuit using nodes
+# Process for solving a simple circuit using nodes
 
 1. Simplify to a certain degree by using Norton / Thevenin and Req
 
@@ -23,7 +23,7 @@ Model and solve electric circuits using strategies learned in ECE 081
 9. Use KCL to find all currents through voltage sources
 
 
-#Process for solving a simple circuit using mesh
+# Process for solving a simple circuit using mesh
 
 1. Simplify to a certain degree by using Norton / Thevenin and Req
 
