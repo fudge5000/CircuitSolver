@@ -6,17 +6,31 @@
 public class Resistor extends ElectricComponent
 {
     private double resistance;
-    private ElectricComponent[] componentList;
+    private Node[] nodeList;
     
     /**
      * Construct a resistor
      * @param resistance the resistance in Ohms
      * @param componentList the components the resistor is connected to
      */
-    public Resistor(double resistance, ElectricComponent[] componentList)
+    public Resistor(double resistance, Node[] nodeList)
     {
         this.resistance = resistance;
-        this.componentList = componentList;
+        this.nodeList = nodeList;
+    }
+    
+    /**
+     * Get the next node when traversing the resistor
+     * @param start the node you're coming from
+     * @return the other node
+     */
+    public Node getNextNode(Node start)
+    {
+        if (start == nodeList[0])
+            return nodeList[1];
+        if (start == nodeList[1])
+            return nodeList[0];
+        throw new IllegalArgumentException();
     }
     
     /**
