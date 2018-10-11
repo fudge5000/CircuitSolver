@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Represents a junction between multiple components
  * @author Jacob Oakman
@@ -5,19 +7,32 @@
  */
 public class Node extends ElectricComponent
 {
-    private ElectricComponent[] compList;
+    private ArrayList<ElectricComponent> compList;
     private int index;
+    
+    //--CONSTRUCTORS------------------------------------
+    
+    /**
+     * Construct a node object
+     * @param index index of node
+     */
+    public Node(int index)
+    {
+        this.index = index;
+    }
     
     /**
      * Construct a node object
      * @param index index of node
      * @param compList list of components connected to the node
      */
-    public Node(int index, ElectricComponent[] compList)
+    public Node(int index, ArrayList<ElectricComponent> compList)
     {
         this.index = index;
         this.compList = compList;
     }
+    
+    //--METHODS-----------------------------------------
     
     /**
      * Generates a part of the matrix to solve this circuit
@@ -28,27 +43,40 @@ public class Node extends ElectricComponent
         double[] equasion = new double[nodeCount];
         TraversalObject strider = new TraversalObject(this);
         Node other;
+        ElectricComponent component;
         
-        for (int i = 0; i < this.compList.length; i++)
+        for (int i = 0; i < this.compList.size(); i++)
         {
-            other = strider.nextNode(this.compList[i]);
+            component = this.compList.get(i);
+            other = strider.nextNode(this.compList.get(i));
             
-            if (this.compList[i] instanceof Resistor)
+            if (component instanceof Resistor)
             {
+                component = (Resistor)component;
+                
                 equasion[this.getIndex()] += 1/strider.calcREQ();
                 equasion[other.getIndex()] -= 1/strider.calcREQ();
             }
-            else if (this.compList[i] instanceof Source)
+            else if (this.compList.get(i) instanceof Source)
             {
-                //if is current source
+                component = (Source)component;
+                if (((Source)component).getType() == SourceType.CURRENT)
+                {
+                    //Assume current going out of the node
+                    equasion[0] += ((Source)component).getValue(this);
+                }
                 
                 //if is voltage source
+                //Check if other node is knows
+                //If not, convert to super-node
                 
             }
         }
         
         return equasion;
     }
+    
+    //--GETTERS, SETTERS AND TOSTRING--------------------
     
     /**
      * Getter method for index field
@@ -57,5 +85,13 @@ public class Node extends ElectricComponent
     public int getIndex()
     {
         return index;
+    }
+    
+    /**
+     * ToString method for Node
+     */
+    public String toString()
+    {
+        return "Node #" + this.index + ", Connected to " + this.compList.toString();
     }
 }

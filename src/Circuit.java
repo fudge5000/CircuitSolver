@@ -1,4 +1,5 @@
-import Jama.*; 
+import Jama.*;
+import java.util.ArrayList;
 
 /**
  * Represents an electric circuit
@@ -7,44 +8,32 @@ import Jama.*;
  */
 public class Circuit
 {
-    private Node[] nodeList;
-    private Mesh[] meshList;
+    private ArrayList<Node> nodeList;
+    private ArrayList<Mesh> meshList;
     
     /**
      * Create a Circuit object
      * @param nodeList list of populated nodes
      */
-    public Circuit(Node[] nodeList)
+    public Circuit()
     {
-        this.nodeList = nodeList;
+        this.nodeList = new ArrayList<Node>();
+        this.meshList = new ArrayList<Mesh>();
     }
     
-    /**
-     * Create a Circuit object
-     * @param meshList list of meshes
-     */
-    public Circuit(Mesh[] meshList)
+    public boolean addNode(Node node)
     {
-        this.meshList = meshList;
+        return this.nodeList.add(node);
     }
     
-    /**
-     * Create a Circuit object
-     * @param nodeList list of populated nodes
-     * @param meshList list of meshes
-     */
-    public Circuit(Node[] nodeList, Mesh[] meshList)
+    public void addNode(int index, Node node)
     {
-        this.nodeList = nodeList;
-        this.meshList = meshList;
+        this.nodeList.add(index, node);
     }
     
-    /**
-     * Converts to a mesh list object
-     */
-    public void convertToMeshList()
+    public Node getNode(int index)
     {
-        
+        return this.nodeList.get(index);
     }
     
     /**
@@ -53,11 +42,11 @@ public class Circuit
      */
     public double[] getMeshKVLList()
     {
-        double[][] matrix = new double[meshList.length][meshList.length];
+        double[][] matrix = new double[meshList.size()][meshList.size()];
         
-        for (int i = 0; i < meshList.length; i++)
+        for (int i = 0; i < meshList.size(); i++)
         {
-            matrix[i] = meshList[i].generateMeshEquasion(meshList.length);
+            matrix[i] = meshList.get(i).generateMeshEquasion(meshList.size());
         }
         
         double[] solution = this.solveEquasions(matrix);
@@ -77,11 +66,11 @@ public class Circuit
      */
     public double[] getNodeKCLList()
     {
-        double[][] matrix = new double[nodeList.length][nodeList.length];
+        double[][] matrix = new double[nodeList.size()][nodeList.size()];
         
-        for (int i = 0; i < nodeList.length; i++)
+        for (int i = 0; i < nodeList.size(); i++)
         {
-            matrix[i] = nodeList[i].generateNodeEquasion(nodeList.length);
+            matrix[i] = nodeList.get(i).generateNodeEquasion(nodeList.size());
         }
         
         double[] solution = this.solveEquasions(matrix);

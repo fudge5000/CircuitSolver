@@ -6,7 +6,20 @@
 public class Resistor extends ElectricComponent
 {
     private double resistance;
-    private Node[] nodeList;
+    private Double voltage;
+    private Double current;
+    
+    //Direction is arbitrarily assigned 0 --> 1
+    private Node[] nodeList = new Node[2];
+    
+    /**
+     * Construct a resistor
+     * @param resistance the resistance in Ohms
+     */
+    public Resistor(double resistance)
+    {
+        this.resistance = resistance;
+    }
     
     /**
      * Construct a resistor
@@ -33,12 +46,61 @@ public class Resistor extends ElectricComponent
         throw new IllegalArgumentException();
     }
     
+    public void addNode(Node node)
+    {
+        if (this.nodeList[0] == null)
+        {
+            this.nodeList[0] = node;
+        }
+        else if (this.nodeList[1] == null)
+        {
+            this.nodeList[1] = node;
+        }
+        else
+        {
+            throw new ArrayIndexOutOfBoundsException("Cannot add more than two nodes to a resistor");
+        }
+    }
+    
+    public double getVoltage() throws UnknownVoltageException
+    {
+        if (this.voltage != null)
+        {
+            return this.voltage.doubleValue();
+        }
+        else if (this.current != null)
+        {
+            return getVoltageFromCurrent(this.current.doubleValue());
+        }
+        
+        throw new UnknownVoltageException();
+    }
+    
+    /**
+     * 
+     * @return
+     * @throws UnknownCurrentException
+     */
+    public double getCurrent() throws UnknownCurrentException
+    {
+        if (this.current != null)
+        {
+            return this.current.doubleValue();
+        }
+        else if (this.voltage != null)
+        {
+            return getVoltageFromCurrent(this.voltage.doubleValue());
+        }
+        
+        throw new UnknownCurrentException();
+    }
+    
     /**
      * Uses Ohm's Law to calculate voltage given a current
      * @param current the current going through the resistor
      * @return the voltage drop over the resistor
      */
-    public double getVoltageFromCurrent(double current)
+    private double getVoltageFromCurrent(double current)
     {
         return current * this.resistance;
     }
@@ -48,7 +110,7 @@ public class Resistor extends ElectricComponent
      * @param voltage the voltage drop over the resistor
      * @return the current going through the resistor
      */
-    public double getCurrentFromVoltage(double voltage)
+    private double getCurrentFromVoltage(double voltage)
     {
         return voltage / this.resistance;
     }
