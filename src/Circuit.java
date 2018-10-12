@@ -8,8 +8,8 @@ import java.util.ArrayList;
  */
 public class Circuit
 {
-    private ArrayList<Node> nodeList;
-    private ArrayList<Mesh> meshList;
+    private ArrayList<Node> nodeList = new ArrayList<Node>();
+    private ArrayList<Mesh> meshList = new ArrayList<Mesh>();
     
     /**
      * Create a Circuit object
@@ -17,8 +17,7 @@ public class Circuit
      */
     public Circuit()
     {
-        this.nodeList = new ArrayList<Node>();
-        this.meshList = new ArrayList<Mesh>();
+        //Do nothing
     }
     
     public boolean addNode(Node node)
@@ -61,10 +60,27 @@ public class Circuit
     }
     
     /**
+     * Solves the circuit using nodes
+     */
+    public void solveNode()
+    {
+        double[][] matrix;
+        
+        matrix = this.getNodeKCLList();
+        
+        double[] nodeVoltageList = this.solveEquasions(matrix);
+        
+        for (int i = 0; i < nodeVoltageList.length; i++)
+        {
+            this.getNode(i+1).setVoltage(nodeVoltageList[i]);
+        }
+    }
+    
+    /**
      * Gets the node voltages for each node
      * @return an array with voltages for each node
      */
-    public double[] getNodeKCLList()
+    public double[][] getNodeKCLList()
     {
         double[][] matrix = new double[nodeList.size()][nodeList.size()];
         
@@ -73,15 +89,7 @@ public class Circuit
             matrix[i] = nodeList.get(i).generateNodeEquasion(nodeList.size());
         }
         
-        double[] solution = this.solveEquasions(matrix);
-        double[] result = new double[solution.length + 1];
-        
-        for (int i = 0; i < solution.length; i++)
-        {
-            result[i + 1] = solution[i];
-        }
-        
-        return result;
+        return matrix;
     }
     
     /**

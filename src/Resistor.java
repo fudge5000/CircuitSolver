@@ -6,10 +6,14 @@
 public class Resistor extends ElectricComponent
 {
     private double resistance;
+    
+    // positive voltage means the voltage is dropping from [0] to [1]
     private Double voltage;
+    
+    // positive current means the current is flowing from [0] to [1]
     private Double current;
     
-    //Direction is arbitrarily assigned 0 --> 1
+    // Direction is arbitrarily assigned [0] --> [1]
     private Node[] nodeList = new Node[2];
     
     /**
@@ -62,6 +66,11 @@ public class Resistor extends ElectricComponent
         }
     }
     
+    /**
+     * gets the voltage
+     * @return the voltage drop over the resistor
+     * @throws UnknownVoltageException
+     */
     public double getVoltage() throws UnknownVoltageException
     {
         if (this.voltage != null)
@@ -70,15 +79,16 @@ public class Resistor extends ElectricComponent
         }
         else if (this.current != null)
         {
-            return getVoltageFromCurrent(this.current.doubleValue());
+            this.voltage = new Double(getVoltageFromCurrent(this.current.doubleValue()));
+            return this.voltage.doubleValue();
         }
         
         throw new UnknownVoltageException();
     }
     
     /**
-     * 
-     * @return
+     * gets the current
+     * @return the current through the resistor
      * @throws UnknownCurrentException
      */
     public double getCurrent() throws UnknownCurrentException
@@ -89,10 +99,22 @@ public class Resistor extends ElectricComponent
         }
         else if (this.voltage != null)
         {
-            return getVoltageFromCurrent(this.voltage.doubleValue());
+            this.current = new Double(getCurrentFromVoltage(this.voltage.doubleValue()));
+            return this.current.doubleValue();
         }
         
         throw new UnknownCurrentException();
+    }
+    
+    /**
+     * Calculate power dissipated by the resistor
+     * @return the power dissipated through the resistor
+     * @throws UnknownCurrentException
+     * @throws UnknownVoltageException
+     */
+    public double getPower() throws UnknownCurrentException, UnknownVoltageException
+    {
+        return this.getCurrent() * this.getVoltage();
     }
     
     /**
@@ -113,25 +135,5 @@ public class Resistor extends ElectricComponent
     private double getCurrentFromVoltage(double voltage)
     {
         return voltage / this.resistance;
-    }
-    
-    /**
-     * Calculates the power dissipated by the resistor
-     * @param current the current going through the resistor
-     * @return the power dissipated by the resistor
-     */
-    public double getPowerFromCurrent(double current)
-    {
-        return current * current * this.resistance;
-    }
-    
-    /**
-     * Calculates the power dissipated by the resistor
-     * @param voltage the voltage drop over the resistor
-     * @return the power dissipated by the resistor
-     */
-    public double getPowerFromVoltage(double voltage)
-    {
-        return voltage * voltage / this.resistance;
     }
 }

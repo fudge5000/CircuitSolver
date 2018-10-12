@@ -2,6 +2,7 @@
 public class TraversalObject
 {
     private ElectricComponent start;
+    private ElectricComponent currentComponent;
     
     public TraversalObject(ElectricComponent start)
     {
@@ -19,6 +20,11 @@ public class TraversalObject
 //            return this.findNode();
 //        }
         return null;
+    }
+    
+    public boolean isHome()
+    {
+        return this.start == this.currentComponent; 
     }
     
     public double calcREQ()

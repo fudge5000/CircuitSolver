@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Node extends ElectricComponent
 {
     private ArrayList<ElectricComponent> compList;
+    private Double voltage;
     private int index;
     
     //--CONSTRUCTORS------------------------------------
@@ -67,13 +68,22 @@ public class Node extends ElectricComponent
                 }
                 
                 //if is voltage source
-                //Check if other node is knows
+                //Check if other node is known
                 //If not, convert to super-node
                 
             }
         }
         
         return equasion;
+    }
+    
+    /**
+     * Checks if voltage has been set
+     * @return whether the field voltage has been set
+     */
+    public boolean isVoltageSet()
+    {
+        return this.voltage != null;
     }
     
     //--GETTERS, SETTERS AND TOSTRING--------------------
@@ -85,6 +95,26 @@ public class Node extends ElectricComponent
     public int getIndex()
     {
         return index;
+    }
+    
+    /**
+     * Getter method for voltage
+     * @return the constructed voltage set on the node
+     * @throws UnknownVoltageException
+     */
+    public double getVoltage() throws UnknownVoltageException
+    {
+        if (this.voltage == null) throw new UnknownVoltageException();
+        return this.voltage.doubleValue();
+    }
+    
+    /**
+     * Setter method for voltage
+     * @param voltage the new node voltage
+     */
+    public void setVoltage(double voltage)
+    {
+        this.voltage = new Double(voltage);
     }
     
     /**

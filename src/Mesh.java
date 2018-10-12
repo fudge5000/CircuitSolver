@@ -8,6 +8,12 @@ public class Mesh
     private MeshLink link;
     private int index;
     
+    public Mesh(int index, MeshLink link)
+    {
+        this.index = index;
+        this.link = link;
+    }
+    
     /**
      * Generates a part of the matrix to solve this circuit
      * @return a mesh equation with the coefficients for all mesh currents
@@ -67,12 +73,6 @@ public class Mesh
         
         return null;
     }
-    
-//    public ElectricComponent[] getIntersection()
-//    {
-//        
-//        return null;
-//    }
     
     public void reverse()
     {
