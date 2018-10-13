@@ -26,6 +26,8 @@ public class Source extends ElectricComponent
         this.type = type;
     }
     
+    //--GETTERS, SETTERS AND TOSTRING--------------------
+    
     /**
      * Getter method for the value field
      * @return the value

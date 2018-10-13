@@ -100,11 +100,11 @@ public class Node extends ElectricComponent
     /**
      * Getter method for voltage
      * @return the constructed voltage set on the node
-     * @throws UnknownVoltageException
+     * @throws UnknownValueException
      */
-    public double getVoltage() throws UnknownVoltageException
+    public double getVoltage() throws UnknownValueException
     {
-        if (this.voltage == null) throw new UnknownVoltageException();
+        if (this.voltage == null) throw new UnknownValueException();
         return this.voltage.doubleValue();
     }
     

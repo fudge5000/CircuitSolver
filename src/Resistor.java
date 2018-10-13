@@ -16,6 +16,8 @@ public class Resistor extends ElectricComponent
     // Direction is arbitrarily assigned [0] --> [1]
     private Node[] nodeList = new Node[2];
     
+    //--CONSTRUCTORS------------------------------------
+    
     /**
      * Construct a resistor
      * @param resistance the resistance in Ohms
@@ -36,6 +38,8 @@ public class Resistor extends ElectricComponent
         this.nodeList = nodeList;
     }
     
+    //--METHODS-----------------------------------------
+    
     /**
      * Get the next node when traversing the resistor
      * @param start the node you're coming from
@@ -50,6 +54,10 @@ public class Resistor extends ElectricComponent
         throw new IllegalArgumentException();
     }
     
+    /**
+     * Add a node to the resistor
+     * @param node a node to add
+     */
     public void addNode(Node node)
     {
         if (this.nodeList[0] == null)
@@ -67,54 +75,21 @@ public class Resistor extends ElectricComponent
     }
     
     /**
-     * gets the voltage
-     * @return the voltage drop over the resistor
-     * @throws UnknownVoltageException
+     * Check if current has been set
+     * @return whether current has been set
      */
-    public double getVoltage() throws UnknownVoltageException
+    public boolean isCurrentSet()
     {
-        if (this.voltage != null)
-        {
-            return this.voltage.doubleValue();
-        }
-        else if (this.current != null)
-        {
-            this.voltage = new Double(getVoltageFromCurrent(this.current.doubleValue()));
-            return this.voltage.doubleValue();
-        }
-        
-        throw new UnknownVoltageException();
+        return this.current != null;
     }
     
     /**
-     * gets the current
-     * @return the current through the resistor
-     * @throws UnknownCurrentException
+     * Check if voltage has been set
+     * @return whether voltage has been set
      */
-    public double getCurrent() throws UnknownCurrentException
+    public boolean isVoltageSet()
     {
-        if (this.current != null)
-        {
-            return this.current.doubleValue();
-        }
-        else if (this.voltage != null)
-        {
-            this.current = new Double(getCurrentFromVoltage(this.voltage.doubleValue()));
-            return this.current.doubleValue();
-        }
-        
-        throw new UnknownCurrentException();
-    }
-    
-    /**
-     * Calculate power dissipated by the resistor
-     * @return the power dissipated through the resistor
-     * @throws UnknownCurrentException
-     * @throws UnknownVoltageException
-     */
-    public double getPower() throws UnknownCurrentException, UnknownVoltageException
-    {
-        return this.getCurrent() * this.getVoltage();
+        return this.voltage != null;
     }
     
     /**
@@ -135,5 +110,67 @@ public class Resistor extends ElectricComponent
     private double getCurrentFromVoltage(double voltage)
     {
         return voltage / this.resistance;
+    }
+    
+    //--GETTERS, SETTERS AND TOSTRING--------------------
+    
+    /**
+     * gets the voltage
+     * @return the voltage drop over the resistor
+     * @throws UnknownValueException
+     */
+    public double getVoltage() throws UnknownValueException
+    {
+        if (this.voltage != null)
+        {
+            return this.voltage.doubleValue();
+        }
+        
+        throw new UnknownValueException();
+    }
+    
+    /**
+     * gets the current
+     * @return the current through the resistor
+     * @throws UnknownValueException
+     */
+    public double getCurrent() throws UnknownValueException
+    {
+        if (this.current != null)
+        {
+            return this.current.doubleValue();
+        }
+        
+        throw new UnknownValueException();
+    }
+    
+    /**
+     * Sets the voltage and current using an input voltage
+     * @param voltage the voltage drop over the resistor
+     */
+    public void setVoltage(double voltage)
+    {
+        this.voltage = new Double(voltage);
+        this.current = new Double(getCurrentFromVoltage(this.voltage.doubleValue()));
+    }
+    
+    /**
+     * Sets the voltage and current using an input current
+     * @param current the current through the resistor
+     */
+    public void setCurrent(double current)
+    {
+        this.current = new Double(current);
+        this.voltage = new Double(getVoltageFromCurrent(this.current.doubleValue()));
+    }
+    
+    /**
+     * Calculate power dissipated by the resistor
+     * @return the power dissipated through the resistor
+     * @throws UnknownValueException
+     */
+    public double getPower() throws UnknownValueException 
+    {
+        return this.getCurrent() * this.getVoltage();
     }
 }
