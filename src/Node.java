@@ -52,15 +52,12 @@ public class Node extends ElectricComponent
             other = strider.nextNode(this.compList.get(i));
             
             if (component instanceof Resistor)
-            {
-                component = (Resistor)component;
-                
-                equasion[this.getIndex()] += 1/strider.calcREQ();
-                equasion[other.getIndex()] -= 1/strider.calcREQ();
+            {                
+                equasion[this.getIndex()] += 1/((Resistor)component).getResistance();
+                equasion[other.getIndex()] -= 1/((Resistor)component).getResistance();
             }
             else if (this.compList.get(i) instanceof Source)
             {
-                component = (Source)component;
                 if (((Source)component).getType() == SourceType.CURRENT)
                 {
                     //Assume current going out of the node
@@ -84,6 +81,20 @@ public class Node extends ElectricComponent
     public boolean isVoltageSet()
     {
         return this.voltage != null;
+    }
+    
+    /**
+     * Adds an electric component to the node
+     * @param comp
+     */
+    public void addComponent(ElectricComponent comp)
+    {
+        this.compList.add(comp);
+    }
+    
+    public boolean needSuperNode()
+    {
+        return false;
     }
     
     //--GETTERS, SETTERS AND TOSTRING--------------------

@@ -173,4 +173,13 @@ public class Resistor extends ElectricComponent
     {
         return this.getCurrent() * this.getVoltage();
     }
+    
+    /**
+     * Getter for the resistance field
+     * @return resistance
+     */
+    public double getResistance()
+    {
+        return this.resistance;
+    }
 }
