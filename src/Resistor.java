@@ -41,20 +41,6 @@ public class Resistor extends ElectricComponent
     //--METHODS-----------------------------------------
     
     /**
-     * Get the next node when traversing the resistor
-     * @param start the node you're coming from
-     * @return the other node
-     */
-    public Node getNextNode(Node start)
-    {
-        if (start == nodeList[0])
-            return nodeList[1];
-        if (start == nodeList[1])
-            return nodeList[0];
-        throw new IllegalArgumentException();
-    }
-    
-    /**
      * Add a node to the resistor
      * @param node a node to add
      */
