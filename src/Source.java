@@ -5,8 +5,8 @@
  */
 public class Source extends ElectricComponent
 {
-    private double value;
     private SourceType type = SourceType.VOLTAGE;
+    private Double value;
     
     // nodeList stores two node objects
     // for voltage sources 0 (+ -) 1
@@ -20,7 +20,7 @@ public class Source extends ElectricComponent
      * @param value the value either in volts or amps of the circuit
      * @param type the type of source either voltage or current
      */
-    public Source(double value, SourceType type)
+    public Source(SourceType type, double value)
     {
         this.value = value;
         this.type = type;
@@ -32,7 +32,7 @@ public class Source extends ElectricComponent
      * Getter method for the value field
      * @return the value
      */
-    public double getValue()
+    public Double getValue()
     {
         return value;
     }
@@ -71,5 +71,4 @@ public class Source extends ElectricComponent
     {
         return this.nodeList[index];
     }
-    
 }

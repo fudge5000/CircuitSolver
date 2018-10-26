@@ -7,23 +7,60 @@ import java.util.ArrayList;
  */
 public class SuperNode extends Node
 {
+    ArrayList<Node> nodeList;
+    
     /**
      * Construct a SuperNode object
      * @param index the index
      */
-    public SuperNode(int index)
+    public SuperNode()
     {
-        super(index);
+        this.nodeList = new ArrayList<Node>();
+    }
+    
+    public SuperNode(Node node)
+    {
+        this.nodeList = new ArrayList<Node>();
+        this.nodeList.add(node);
     }
 
+    public void addNode(Node node)
+    {
+        this.nodeList.add(node);
+    }
+    
     /**
-     * Construct a SuperNode object
-     * @param index the index
-     * @param compList a list of connected components
+     * Gets the equations associated with this supernode
+     * @return a list of equations
      */
-    public SuperNode(int index, ArrayList<ElectricComponent> compList)
+    public ArrayList<Equation> getEquationList()
     {
-        super(index, compList);
+        ArrayList<Equation> result = new ArrayList<Equation>();
+        result.add(new Equation());
+        boolean found = false;
+        Node currentNode;
+        
+        for (int i = 0; i < nodeList.size(); i++)
+        {
+            currentNode = nodeList.get(i);
+            found = false;
+            
+            result.get(0).add(currentNode.generateNodeEquasion(nodeList));
+            
+            for (int j = 1; j < result.size(); j++)
+            {
+                if (result.get(j).get(this.nodeList.get(i).getIndex()) != 0)
+                {
+                    found = true;
+                }
+            }
+            
+            if (found)
+            {
+                result.add(currentNode.generateCompEq());
+            }
+        }
+        
+        return result;
     }
-
 }
