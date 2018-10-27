@@ -8,7 +8,11 @@ import java.util.ArrayList;
 public class Equation
 {
     private ArrayList<Double> equation;
+    private double constant;
 
+    /**
+     * Create new equation object
+     */
     public Equation()
     {
         equation = new ArrayList<Double>();
@@ -21,22 +25,17 @@ public class Equation
      */
     public void add(int index, double amount)
     {
-        equation.set(index, equation.get(index).doubleValue() + amount);
-    }
-    
-    /**
-     * Add another equation
-     * @param other the other equation
-     */
-    public void add(Equation other)
-    {
-        for (int i = 0; i < this.equation.size(); i++)
+        Double newValue;
+        if (this.get(index) != null)
         {
-            if (other.get(i) != null)
-            {
-                this.equation.set(i, new Double(this.get(i).doubleValue() + other.get(i).doubleValue()));
-            }
+            newValue = new Double(this.get(index).doubleValue() + amount);
         }
+        else
+        {
+            newValue = new Double(amount);
+        }
+        
+        this.set(index, newValue);
     }
     
     /**
@@ -46,15 +45,106 @@ public class Equation
      */
     public Double get(int index)
     {
-        return this.equation.get(index);
+        if (index >= this.equation.size())
+        {
+            return new Double(0);
+        }
+        
+        return equation.get(index);
+    }
+    
+    /**
+     * Set the value of a variable in the equation
+     * @param index the index at which to set
+     * @param element element to set
+     */
+    public Double set(int index, Double element)
+    {
+        if (this.equation.size() < index)
+        {
+            for (int i = this.equation.size(); i < index; i++)
+            {
+                this.equation.add(new Double(0));
+            }
+        }
+        
+        if (this.equation.size() == index)
+        {
+            this.equation.add(element);
+            return null;
+        }
+        else
+        {
+            return this.equation.set(index, element);
+        }
+    }
+    
+    /**
+     * Add another equation
+     * @param other the other equation
+     */
+    public void addEq(Equation other)
+    {
+        for (int i = 0; i < this.equation.size(); i++)
+        {
+            if (other.get(i) != null)
+            {
+                this.set(i, new Double(this.get(i).doubleValue() + other.get(i).doubleValue()));
+            }
+        }
     }
 
     /**
-     * Gets value at 0
+     * Gets the constant value
      * @return constant
      */
     public double getConstant()
     {
-        return this.equation.get(0).doubleValue();
+        return this.constant;
+    }
+    
+    /**
+     * Sets the constant value
+     * @param constant new constant
+     */
+    public void setConstant(double constant)
+    {
+        this.constant = constant;
+    }
+    
+    /**
+     * Adds to the constant value
+     * @param constant new constant
+     */
+    public void addConstant(double constant)
+    {
+        this.constant += constant;
+    }
+    
+    /**
+     * Gets the equation as an array
+     * @return 
+     */
+    public double[] getArray(int size)
+    {
+        double[] result = new double[size];
+        
+        for (int i = 0; i < size; i++)
+        {
+            if (this.get(i) != null)
+            {
+                result[i] = this.get(i).doubleValue();
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Convert Equation to string
+     */
+    public String toString()
+    {
+        return this.equation.toString() + " = " + this.constant;
     }
 }

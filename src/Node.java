@@ -5,10 +5,10 @@ import java.util.ArrayList;
  * @author Jacob Oakman
  * @version 2018.09.30
  */
-public class Node
+public class Node implements Comparable<Node>
 {
     private ArrayList<ElectricComponent> compList;
-    private Double voltage;
+    private Double voltage = null;
     private int index;
     
     //--CONSTRUCTORS------------------------------------
@@ -19,6 +19,7 @@ public class Node
     public Node()
     {
         // Do nothing
+        compList = new ArrayList<ElectricComponent>();
     }
     
     /**
@@ -28,6 +29,7 @@ public class Node
     public Node(int index)
     {
         this.index = index;
+        compList = new ArrayList<ElectricComponent>();
     }
     
     /**
@@ -47,9 +49,9 @@ public class Node
      * Generates a part of the matrix to solve this circuit
      * @return a node equation with the coefficients for all node voltages
      */
-    public Equation generateNodeEquasion()
+    public Equation generateNodeEquation()
     {
-        return this.generateNodeEquasion(new ArrayList<Node>());
+        return this.generateNodeEquation(new ArrayList<Node>());
     }
     
     /**
@@ -57,7 +59,7 @@ public class Node
      * @param ignoreList a list of nodes to ignore
      * @return a node equation with the coefficients for all node voltages
      */
-    public Equation generateNodeEquasion(ArrayList<Node> ignoreList)
+    public Equation generateNodeEquation(ArrayList<Node> ignoreList)
     {
         Equation equation = new Equation();
         Node other;
@@ -76,14 +78,22 @@ public class Node
             if (component instanceof Resistor)
             {                
                 equation.add(this.getIndex(), 1/((Resistor)component).getResistance());
-                equation.add(other.getIndex(), -1/((Resistor)component).getResistance());
+                
+                if (other.isVoltageSet())
+                {
+                    equation.addConstant(other.getVoltage() / ((Resistor)component).getResistance());
+                }
+                else
+                {
+                    equation.add(other.getIndex(), -1/((Resistor)component).getResistance());
+                }
             }
             else if (this.compList.get(i) instanceof Source)
             {
                 if (((Source)component).getType() == SourceType.CURRENT)
                 {
                     //Assume current going out of the node
-                    equation.add(0, ((Source)component).getValue(this));
+                    equation.addConstant(-((Source)component).getValue(this));
                 }
                 else if (((Source)component).getType() == SourceType.VOLTAGE)
                 {
@@ -132,23 +142,13 @@ public class Node
             component = this.compList.get(i);
             other = component.nextNode(this);
             
-            if (this.compList.get(i) instanceof Source)
+            if (this.compList.get(i) instanceof Source
+                    && ((Source)component).getType() == SourceType.VOLTAGE
+                    && other.isVoltageSet())
             {
-                if (((Source)component).getType() == SourceType.VOLTAGE)
-                {
-                    if (other.isVoltageSet())
-                    {
-                        try
-                        {
-                            this.voltage = new Double(other.getVoltage() + ((Source)component).getValue(this));
-                        }
-                        catch (Exception e)
-                        {
-                            break;
-                        }
-                        return true;
-                    }
-                }
+                this.voltage = new Double(other.getVoltage()
+                        + ((Source)component).getValue(this));
+                return true;
             }
         }
         
@@ -198,13 +198,30 @@ public class Node
             other = component.nextNode(this);
             
             if (this.compList.get(i) instanceof Source
-                    && ((Source) component).getType() == SourceType.VOLTAGE)
+                    && ((Source) component).getType() == SourceType.VOLTAGE
+                    && !other.isVoltageSet())
             {
                 return true;
             }
         }
         
         return false;
+    }
+    
+    public int getNumSources(SourceType type)
+    {
+        int num = 0;
+        
+        for (int i = 0; i < this.compList.size(); i++)
+        {
+            if (this.compList.get(i) instanceof Source
+                    && ((Source) this.compList.get(i)).getType() == type)
+            {
+                num++;
+            }
+        }
+        
+        return num;
     }
     
     //--GETTERS, SETTERS AND TOSTRING--------------------
@@ -221,11 +238,10 @@ public class Node
     /**
      * Getter method for voltage
      * @return the constructed voltage set on the node
-     * @throws UnknownValueException
      */
-    public double getVoltage() throws UnknownValueException
+    public double getVoltage()
     {
-        if (this.voltage == null) throw new UnknownValueException();
+        if (this.voltage == null) throw new IllegalStateException();
         return this.voltage.doubleValue();
     }
     
@@ -243,6 +259,14 @@ public class Node
      */
     public String toString()
     {
-        return "Node #" + this.index + ", Connected to " + this.compList.toString();
+        return "Node #" + this.index;
+    }
+
+    /**
+     * compareTo based on index values
+     */
+    public int compareTo(Node other)
+    {
+        return this.index - other.index;
     }
 }

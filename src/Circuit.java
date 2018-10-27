@@ -8,17 +8,8 @@ import java.util.ArrayList;
  */
 public class Circuit
 {
-    private ArrayList<Node> nodeList = new ArrayList<Node>();
-    private ArrayList<Net> netList = new ArrayList<Net>();
-    
-    /**
-     * Create a Circuit object
-     * @param nodeList list of populated nodes
-     */
-    public Circuit()
-    {
-        //Do nothing
-    }
+    private ArrayList<Node> nodeList;
+    private ArrayList<Net> netList;
     
     /**
      * Create a Circuit object
@@ -27,7 +18,12 @@ public class Circuit
     public Circuit(ArrayList<Net> netList)
     {
         this.netList = netList;
+        
+        nodeList = new ArrayList<Node>();
+        
         this.generateNodeList();
+        this.assignGroundNode();
+        this.findKnownVoltages();
     }
     
     public void generateNodeList()
@@ -35,10 +31,29 @@ public class Circuit
         Net curNet;
         ElectricComponent component;
         int nodeIndex;
+        int maxNodeIndex = 0;
         
         for (int i = 0; i < this.netList.size(); i++)
         {
-            curNet = this.netList.get(0);
+            if (maxNodeIndex < this.netList.get(i).getNodeIndexAt(0))
+            {
+                maxNodeIndex = this.netList.get(i).getNodeIndexAt(0);
+            }
+            
+            if (maxNodeIndex < this.netList.get(i).getNodeIndexAt(1))
+            {
+                maxNodeIndex = this.netList.get(i).getNodeIndexAt(1);
+            }
+        }
+        
+        for (int i = 0; i <= maxNodeIndex; i++)
+        {
+            this.nodeList.add(new Node(i));
+        }
+        
+        for (int i = 0; i < this.netList.size(); i++)
+        {
+            curNet = this.netList.get(i);
             
             switch (curNet.getComponentType())
             {
@@ -68,15 +83,98 @@ public class Circuit
             {
                 nodeIndex = curNet.getNodeIndexAt(j);
                 
-                if (nodeIndex > nodeList.size() || nodeList.get(nodeIndex) == null)
-                {
-                    nodeList.add(nodeIndex, new Node(nodeIndex));
-                }
-                
                 nodeList.get(nodeIndex).addComponent(component);
                 component.setNodeAt(j, nodeList.get(nodeIndex));
             }
         }
+    }
+    
+    /**
+     * Assigns a node to ground
+     * @return the ground
+     */
+    public Node assignGroundNode()
+    {
+        Node ground = null;
+        int numSources = 0;
+        int curNumSources = 0;
+        
+        for (int i = 0; i < this.nodeList.size(); i++)
+        {
+            curNumSources = this.nodeList.get(i).getNumSources(SourceType.VOLTAGE);
+            if (ground == null || numSources <= curNumSources)
+            {
+                ground = this.nodeList.get(i);
+                numSources = curNumSources;
+            }
+        }
+        
+        if (ground != null)
+        {
+            ground.setVoltage(0);
+            
+            return ground;
+        }
+        
+        throw new IllegalStateException("You done goofed");
+    }
+    
+    /**
+     * Finds the known node voltages
+     */
+    public void findKnownVoltages()
+    {
+        boolean found = false;
+        
+        do
+        {
+            found = false;
+            for (int i = 0; i < this.nodeList.size(); i++)
+            {
+                if (!this.nodeList.get(i).isVoltageSet()
+                        && this.nodeList.get(i).findVoltage())
+                {
+                    found = true;
+                }
+            }
+        }
+        while (found);
+    }
+    
+    /**
+     * Solves the circuit using nodes
+     */
+    public void solveNode()
+    {
+        Equation[] matrix;
+        
+        matrix = this.getNodeKCLList();
+        
+        double[] nodeVoltageList = this.solveEquations(matrix);
+        
+        for (int i = 0; i < nodeVoltageList.length; i++)
+        {
+            this.getNode(i+1).setVoltage(nodeVoltageList[i]);
+        }
+    }
+    
+    /**
+     * Gets the node voltages for each node
+     * @return an array with voltages for each node
+     */
+    public Equation[] getNodeKCLList()
+    {
+        ArrayList<Equation> matrix = new ArrayList<Equation>();
+        
+        for (int i = 0; i < nodeList.size(); i++)
+        {
+            if (!nodeList.get(i).isVoltageSet())
+            {
+                matrix.add(nodeList.get(i).generateNodeEquation());
+            }
+        }
+        
+        return matrix.toArray(new Equation[0]);
     }
     
     /**
@@ -110,60 +208,41 @@ public class Circuit
     }
     
     /**
-     * Solves the circuit using nodes
-     */
-    public void solveNode()
-    {
-        Equation[] matrix;
-        
-        matrix = this.getNodeKCLList();
-        
-        double[] nodeVoltageList = this.solveEquasions(matrix);
-        
-        for (int i = 0; i < nodeVoltageList.length; i++)
-        {
-            this.getNode(i+1).setVoltage(nodeVoltageList[i]);
-        }
-    }
-    
-    /**
-     * Gets the node voltages for each node
-     * @return an array with voltages for each node
-     */
-    public Equation[] getNodeKCLList()
-    {
-        Equation[] matrix = new Equation[nodeList.size()];
-        
-        for (int i = 0; i < nodeList.size(); i++)
-        {
-            matrix[i] = nodeList.get(i).generateNodeEquasion();
-        }
-        
-        return matrix;
-    }
-    
-    /**
      * Uses the arrays generated by the node equations
      * @param equasionList
      * @return array with voltages
      */
-    public double[] solveEquasions(Equation[] equasionList)
+    public double[] solveEquations(Equation[] equationList)
     {
-        double[][] coeficients = new double[equasionList.length][equasionList.length - 1];
-        double[][] constants = new double[equasionList.length][1];
+        double[][] coeficients = new double[equationList.length][equationList.length - 1];
+        double[][] constants = new double[equationList.length][1];
+        ArrayList<Integer> varMap = new ArrayList<Integer>();
                 
-//        for (int y = 0; y < equasionList.length; y++)
-//        {
-//            for (int x = 1; x < equasionList[y].length; x++)
-//            {
-//                coeficients[y][x - 1] = equasionList[y][x];
-//            }
-//            constants[y][0] = equasionList[y][0];
-//        }
+        for (int y = 0; y < equationList.length; y++)
+        {
+            coeficients[y] = equationList[y].getArray(equationList.length);
+            constants[y][0] = equationList[y].getConstant();
+        }
+        
+        ArrayList<ArrayList<Double>> cleanedCoefList = new ArrayList<ArrayList<Double>>();
+        boolean hasValue;
+        for (int i = 0; i < coeficients[0].length; i++)
+        {
+            
+            for (int j = 0; j < coeficients.length; i++)
+            {
+                
+            }
+        }
+        
+        //cleanup coefs
+        //cleanup constants
         
         Matrix coefMatrix = new Matrix(coeficients);
         Matrix conMatrix = new Matrix(constants);
         
         return coefMatrix.solve(conMatrix).getColumnPackedCopy();
     }
+    
+    
 }

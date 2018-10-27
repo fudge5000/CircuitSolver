@@ -45,7 +45,7 @@ public class SuperNode extends Node
             currentNode = nodeList.get(i);
             found = false;
             
-            result.get(0).add(currentNode.generateNodeEquasion(nodeList));
+            result.get(0).addEq(currentNode.generateNodeEquation(nodeList));
             
             for (int j = 1; j < result.size(); j++)
             {

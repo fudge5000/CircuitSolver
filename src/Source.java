@@ -11,7 +11,6 @@ public class Source extends ElectricComponent
     // nodeList stores two node objects
     // for voltage sources 0 (+ -) 1
     // for current sources 0 (-->) 1
-    private Node[] nodeList = new Node[2];
     
     //--CONSTRUCTORS------------------------------------
     
@@ -24,6 +23,7 @@ public class Source extends ElectricComponent
     {
         this.value = value;
         this.type = type;
+        this.nodeList = new Node[2];
     }
     
     //--GETTERS, SETTERS AND TOSTRING--------------------

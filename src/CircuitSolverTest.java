@@ -23,9 +23,15 @@ public class CircuitSolverTest extends TestCase
      */
     public void setUp()
     {
-        circuit = new Circuit();
         
-        ArrayList<ElectricComponent[]> netList = new ArrayList<ElectricComponent[]>();
+        ArrayList<Net> netList = new ArrayList<Net>();
+        
+        netList.add(new Net(ComponentType.VOLTAGE_SOURCE, 12, 0, 1));
+        netList.add(new Net(ComponentType.RESISTOR, 2, 0, 1));
+        netList.add(new Net(ComponentType.RESISTOR, 5, 1, 2));
+        netList.add(new Net(ComponentType.CURRENT_SOURCE, 1, 0, 2));
+
+        circuit = new Circuit(netList);
     }
 
     /**
@@ -33,6 +39,18 @@ public class CircuitSolverTest extends TestCase
      */
     public void test()
     {
-        assertEquals(1,2);
+        Equation[] eqlist = circuit.getNodeKCLList();
+        
+        for (int i = 0; i < eqlist.length; i++)
+        {
+            System.out.println(eqlist[i]);
+        }
+        
+        double[] nodeValues = circuit.solveEquations(eqlist);
+        
+        for (int i = 0; i < eqlist.length; i++)
+        {
+            System.out.print("Node " + i + " : " + nodeValues[i] + ", ");
+        }
     }
 }

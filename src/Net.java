@@ -14,7 +14,7 @@ public class Net
         this.componentType = componentType;
         this.value = value;
         this.nodeList[0] = startIndex;
-        this.nodeList[0] = endIndex;
+        this.nodeList[1] = endIndex;
     }
     
     /**

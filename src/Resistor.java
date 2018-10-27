@@ -14,7 +14,7 @@ public class Resistor extends ElectricComponent
     private Double current;
     
     // Direction is arbitrarily assigned [0] --> [1]
-    private Node[] nodeList = new Node[2];
+    // FROM PARENT: protected Node[] nodeList = new Node[2];
     
     //--CONSTRUCTORS------------------------------------
     
@@ -25,6 +25,7 @@ public class Resistor extends ElectricComponent
     public Resistor(double resistance)
     {
         this.resistance = resistance;
+        this.nodeList = new Node[2];
     }
     
     /**
