@@ -154,6 +154,23 @@ public class Equation
      */
     public String toString()
     {
-        return this.equation.toString() + " = " + this.constant;
+        String result = "";
+        
+        for (int i = 0; i < this.equation.size(); i++)
+        {
+            if (this.equation.get(i) != 0)
+            {
+                if (result.equals(""))
+                {
+                    result += this.equation.get(i) +  "V" + i;
+                }
+                else
+                {
+                    result += " + " + this.equation.get(i) +  "V" + i;
+                }
+            }
+        }
+        
+        return result + " = " + this.constant;
     }
 }
