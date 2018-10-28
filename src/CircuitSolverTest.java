@@ -26,10 +26,13 @@ public class CircuitSolverTest extends TestCase
         
         ArrayList<Net> netList = new ArrayList<Net>();
         
-        netList.add(new Net(ComponentType.VOLTAGE_SOURCE, 12, 0, 1));
-        netList.add(new Net(ComponentType.RESISTOR, 2, 0, 1));
-        netList.add(new Net(ComponentType.RESISTOR, 5, 1, 2));
-        netList.add(new Net(ComponentType.CURRENT_SOURCE, 1, 0, 2));
+        netList.add(new Net(ComponentType.VOLTAGE_SOURCE, 50, 1, 0));
+        netList.add(new Net(ComponentType.RESISTOR, 80, 1, 2));
+        netList.add(new Net(ComponentType.RESISTOR, 40, 2, 3));
+        netList.add(new Net(ComponentType.RESISTOR, 800, 1, 3));
+        netList.add(new Net(ComponentType.RESISTOR, 50, 2, 0));
+        netList.add(new Net(ComponentType.CURRENT_SOURCE, 0.75, 0, 3));
+        netList.add(new Net(ComponentType.RESISTOR, 200, 3, 0));
 
         circuit = new Circuit(netList);
     }

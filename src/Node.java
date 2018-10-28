@@ -208,20 +208,20 @@ public class Node implements Comparable<Node>
         return false;
     }
     
-    public int getNumSources(SourceType type)
+    public ArrayList<Source> getAllSource(SourceType type)
     {
-        int num = 0;
+        ArrayList<Source> sourceList = new ArrayList<Source>();
         
         for (int i = 0; i < this.compList.size(); i++)
         {
             if (this.compList.get(i) instanceof Source
                     && ((Source) this.compList.get(i)).getType() == type)
             {
-                num++;
+                sourceList.add((Source) this.compList.get(i));
             }
         }
         
-        return num;
+        return sourceList;
     }
     
     //--GETTERS, SETTERS AND TOSTRING--------------------

@@ -96,16 +96,39 @@ public class Circuit
     public Node assignGroundNode()
     {
         Node ground = null;
-        int numSources = 0;
-        int curNumSources = 0;
+        int numNegSource = 0;
+        int numPosSource = 0;
+        int curNumPosSource = 0;
+        int curNumNegSource = 0;
+        ArrayList<Source> sourceList;
         
         for (int i = 0; i < this.nodeList.size(); i++)
         {
-            curNumSources = this.nodeList.get(i).getNumSources(SourceType.VOLTAGE);
-            if (ground == null || numSources <= curNumSources)
+            curNumPosSource = 0;
+            curNumNegSource = 0;
+            sourceList = this.nodeList.get(i).getAllSource(SourceType.VOLTAGE);
+            
+            for (int j = 0; j < sourceList.size(); j++)
+            {
+                if (sourceList.get(j).getValue(this.nodeList.get(i)) > 0)
+                {
+                    curNumPosSource++;
+                }
+                else
+                {
+                    curNumNegSource++;
+                }
+            }
+            
+            if (ground == null
+                    || curNumNegSource + curNumPosSource > numNegSource
+                            + numPosSource
+                    || (curNumNegSource + curNumPosSource > numNegSource
+                            + numPosSource && curNumNegSource > numNegSource))
             {
                 ground = this.nodeList.get(i);
-                numSources = curNumSources;
+                numPosSource = curNumPosSource;
+                numNegSource = curNumNegSource;
             }
         }
         
