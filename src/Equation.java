@@ -141,6 +141,15 @@ public class Equation
     }
     
     /**
+     * get number of variables in equation
+     * @return size
+     */
+    public int size()
+    {
+        return this.equation.size();
+    }
+    
+    /**
      * Convert Equation to string
      */
     public String toString()

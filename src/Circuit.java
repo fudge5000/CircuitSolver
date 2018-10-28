@@ -214,34 +214,64 @@ public class Circuit
      */
     public double[] solveEquations(Equation[] equationList)
     {
-        double[][] coeficients = new double[equationList.length][equationList.length - 1];
+        double[][] coeficients = new double[equationList.length][nodeList.size()];
         double[][] constants = new double[equationList.length][1];
+        boolean[] keepColumn = new boolean[nodeList.size()];
         ArrayList<Integer> varMap = new ArrayList<Integer>();
-                
+        
         for (int y = 0; y < equationList.length; y++)
         {
-            coeficients[y] = equationList[y].getArray(equationList.length);
+            coeficients[y] = equationList[y].getArray(nodeList.size());
+            
+            System.out.println(coeficients[y][0] + " " + coeficients[y][1]);
+            
+            for (int x = 0; x < coeficients[y].length; x++)
+            {
+                System.out.println(coeficients[y][x]);
+                if (coeficients[y][x] != 0.0)
+                {
+                    keepColumn[x] = true;
+                }
+            }
+            
             constants[y][0] = equationList[y].getConstant();
         }
         
-        ArrayList<ArrayList<Double>> cleanedCoefList = new ArrayList<ArrayList<Double>>();
-        boolean hasValue;
-        for (int i = 0; i < coeficients[0].length; i++)
-        {
-            
-            for (int j = 0; j < coeficients.length; i++)
-            {
-                
-            }
-        }
-        
-        //cleanup coefs
-        //cleanup constants
+//        ArrayList<ArrayList<Double>> cleanedCoefList = new ArrayList<ArrayList<Double>>();
+//        
+//        for (int i = 0; i < coeficients[0].length; i++)
+//        {
+//            cleanedCoefList.add(new ArrayList<Double>());
+//        }
+//        
+//        for (int y = 0; y < coeficients.length; y++)
+//        {
+//            for (int x = 0; x < keepColumn.length; x++)
+//            {
+//                if (keepColumn[x])
+//                {
+//                    cleanedCoefList.get(y).add(new Double(coeficients[y][x]));
+//                    varMap.add(new Integer(x));
+//                }
+//            }
+//        }
+//        
+//        coeficients = new double[cleanedCoefList.size()][varMap.size()];
+//        
+//        for (int i = 0; i < cleanedCoefList.size(); i++)
+//        {
+//            for (int j = 0; j < cleanedCoefList.get(i).size(); j++)
+//            {
+//                coeficients[i][j] = cleanedCoefList.get(i).get(j);
+//            }
+//        }
         
         Matrix coefMatrix = new Matrix(coeficients);
         Matrix conMatrix = new Matrix(constants);
         
-        return coefMatrix.solve(conMatrix).getColumnPackedCopy();
+        double[] solution = coefMatrix.solve(conMatrix).getColumnPackedCopy();
+        
+        return solution;
     }
     
     

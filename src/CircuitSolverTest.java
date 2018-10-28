@@ -48,7 +48,7 @@ public class CircuitSolverTest extends TestCase
         
         double[] nodeValues = circuit.solveEquations(eqlist);
         
-        for (int i = 0; i < eqlist.length; i++)
+        for (int i = 0; i < nodeValues.length; i++)
         {
             System.out.print("Node " + i + " : " + nodeValues[i] + ", ");
         }
