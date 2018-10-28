@@ -46,11 +46,12 @@ public class CircuitSolverTest extends TestCase
             System.out.println(eqlist[i]);
         }
         
-        double[] nodeValues = circuit.solveEquations(eqlist);
+        circuit.solveNodeEquationSystem(eqlist);
+        double[] voltageList = circuit.getNodeVoltageList();
         
-        for (int i = 0; i < nodeValues.length; i++)
+        for (int i = 0; i < voltageList.length; i++)
         {
-            System.out.print("Node " + i + " : " + nodeValues[i] + ", ");
+            System.out.println("Node #" + i + ": " + voltageList[i] + "V");
         }
     }
 }
