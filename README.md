@@ -1,6 +1,9 @@
 # CircuitSolver
 Model and solve electric circuits using strategies learned in ECE 081
 
+Currently this program can only do nodal analysis on circuits that don't require supernodes and doesn't simplify anything.
+Mesh analysis has not yet been implemented.
+
 # Process for solving a simple circuit using nodes
 
 1. Simplify to a certain degree by using Norton / Thevenin and Req
