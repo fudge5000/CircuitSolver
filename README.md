@@ -46,3 +46,9 @@ Mesh analysis has not yet been implemented.
 8. Use currents to find all voltage drops over resistors
 
 9. Use KVL to find all voltage drops over current sources
+
+# Future Features
+* Adjust to use complex values to allow for solutions in the phasor domain
+* Import netlist from circuit building UI
+* Solve switching problems
+* Add op-amps
